@@ -1,0 +1,24 @@
+{% extends 'home.html' %}
+
+{% block title %} Coffee List {% endblock %}
+
+{% block content %}
+<h1 align='center'>Welcome to Maidlatte</h1>
+
+<div class="card-container">
+
+    {% for coffee in coffee_list %}
+    <div class="card">
+
+        {% if coffee.image %}
+        <img src="{{ coffee.image.url }}" alt="{{ coffee.name }}" class="card-img">
+        {% endif %}
+        <h3>{{ coffee.name }}</h3>
+        <p>Flavour: {{ coffee.flavour }} </p>
+        <p>Price: ${{ coffee.price }} </p>
+        <a href="/detail/{{ coffee.id }}" class="btn">View Details</a>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

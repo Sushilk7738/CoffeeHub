@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        a {
+            display: inline-block;
+            text-decoration: none;
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <pre>
+
+        <h3 style="color: red;">
+            Detail of {{coffee.name}}
+            <hr>
+            Flavour : {{coffee.flavour}}
+            Price   : {{coffee.price}}
+        </h3>
+
+    </pre>
+
+    <a href="/update/{{coffee.id}}" style="background-color: green;">Update Coffee</a>
+    <a href="/delete/{{coffee.id}}" style="background-color: red;">Delete Coffee</a>
+
+</body>
+</html>
