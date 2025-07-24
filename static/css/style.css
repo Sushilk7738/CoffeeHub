@@ -1,7 +1,7 @@
-* {
+html body{
     padding: 0;
     margin: 0;
-
+    height: 100%;
 }
 
 body {
@@ -11,10 +11,17 @@ body {
     background-position: center;
     background-repeat: no-repeat; */
     height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
 }
 
 nav {
-    background-color: rgba(0, 0, 0, 0.708);
+    background-color: rgba(0, 0, 0, 0.829);
     backdrop-filter: blur(10px);
     color: white;
     height: 4rem;
@@ -82,6 +89,22 @@ ul li a:hover {
         display: block;
     }
 }
+
+
+
+/* ===== Footer Base Styles ===== */
+
+footer {
+    background-color: #252222;
+    color: #fff;
+    text-align: center;
+    padding: 15px 10px;
+    position: relative;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
 
 
 
