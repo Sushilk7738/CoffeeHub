@@ -1,24 +1,52 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %} Coffee List {% endblock %}
 
 {% block content %}
-<h1 align='center'>Welcome to Maidlatte</h1>
+<section class="card-section">
 
-<div class="card-container">
+    <h1 class="section-title">Our Coffees</h1>
 
-    {% for coffee in coffee_list %}
-    <div class="card">
+    <div class="card-container">
 
-        {% if coffee.image %}
-        <img src="{{ coffee.image.url }}" alt="{{ coffee.name }}" class="card-img">
-        {% endif %}
-        <h3>{{ coffee.name }}</h3>
-        <p>Flavour: {{ coffee.flavour }} </p>
-        <p>Price: ${{ coffee.price }} </p>
-        <a href="/detail/{{ coffee.id }}" class="btn">View Details</a>
+        <div class="card">
+            <img src="{% static 'images/backgr.jpg' %}" alt="Signature Espresso" class="card-img">
+            <h3>Signature Espresso</h3>
+            <p>Classic that never goes out of style.</p>
+            <a href="#" class="btn">Add to Cart</a>
+        </div>
+
+        <div class="card">
+            <img src="{%static 'images/backgr.jpg' %}" alt="House Cappuccino" class="card-img">
+            <h3>House Cappuccino</h3>
+            <p>Perfect blend of milk and coffee richness.</p>
+            <a href="#" class="btn">Add to Cart</a>
+        </div>
+
+        <div class="card">
+            <img src="{%static 'images/backgr.jpg' %}" alt="Special Latte" class="card-img">
+            <h3>Special Latte</h3>
+            <p>Creamy and smooth for your daily delight.</p>
+            <a href="#" class="btn">Add to Cart</a>
+        </div>
+
+
+
+        <!-- Dynamic Cards from Admin -->
+        {% for coffee in coffee_list %}
+        <div class="card">
+
+            {% if coffee.image %}
+            <img src="{{ coffee.image.url }}" alt="{{ coffee.name }}" class="card-img">
+            {% endif %}
+            <h3>{{ coffee.name }}</h3>
+            <p>Flavour: {{ coffee.flavour }} </p>
+            <p>Price: ${{ coffee.price }} </p>
+            <a href="/detail/{{ coffee.id }}" class="btn">View Details</a>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
-
+</section>  
 {% endblock %}

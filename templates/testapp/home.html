@@ -4,7 +4,13 @@
 
 
 {% block content %}
-    <h1>Welcome to Maid Latte</h1>
-    
-{% endblock  %}
-    
+<section class="hero">
+    <div class="hero-overlay">
+        <div class="hero-content">
+            <h1>Where Every Sip Tells a Story</h1>
+            <p>Discover premium, hand‑crafted coffees brewed with love.</p>
+            <a href="{% url 'cafe' %}" class="hero-btn">Explore Our Coffees</a>
+        </div>
+    </div>
+</section>    
+{% endblock %}
