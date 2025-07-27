@@ -21,7 +21,7 @@ class CoffeeListView(ListView):
     
 class CoffeeDetailView(DetailView):
     model = Coffee
-    
+    context_object_name = 'coffee'
 class CoffeeUpdateView(UpdateView):
     model = Coffee
     fields = ['flavour', 'price', 'image']

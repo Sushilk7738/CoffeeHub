@@ -1,9 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+{% extends 'base.html' %}
+
+
+{% block content %}
+    
+    <section class="detail-section">
+
+        <h3 style="color: red;">
+            Detail of {{coffee.name}}
+            <hr>
+            Flavour : {{coffee.flavour}}
+            Price   : {{coffee.price}}
+        </h3>
+    
+    <a href="/update/{{coffee.id}}" >Update Coffee</a>
+    <a href="/delete/{{coffee.id}}" >Delete Coffee</a>
+    
+</section>
+{% endblock %}
+</html>
+
+
+
+
+
+<!-- 
     <style>
         a {
             display: inline-block;
@@ -14,21 +34,4 @@
             margin-left: 10px;
         }
     </style>
-</head>
-<body>
-    <pre>
-
-        <h3 style="color: red;">
-            Detail of {{coffee.name}}
-            <hr>
-            Flavour : {{coffee.flavour}}
-            Price   : {{coffee.price}}
-        </h3>
-
-    </pre>
-
-    <a href="/update/{{coffee.id}}" style="background-color: green;">Update Coffee</a>
-    <a href="/delete/{{coffee.id}}" style="background-color: red;">Delete Coffee</a>
-
-</body>
-</html>
+</head> -->
