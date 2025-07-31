@@ -15,26 +15,35 @@
             <img src="{% static 'images/backgr.jpg' %}" alt="Signature Espresso" class="card-img">
             <h3>Signature Espresso</h3>
             <p>Classic that never goes out of style.</p>
-            <a href="#" class="btn">Add to Cart</a>
+            <form method="POST" action="{% url 'add_to_cart' 1 %}">
+                {% csrf_token %}
+                <button type="submit" class="btn">Add to Cart</button>
+            </form>
         </div>
 
         <div class="card">
             <img src="{%static 'images/backgr.jpg' %}" alt="House Cappuccino" class="card-img">
             <h3>House Cappuccino</h3>
             <p>Perfect blend of milk and coffee richness.</p>
-            <a href="#" class="btn">Add to Cart</a>
+            <form method="POST" action="{% url 'add_to_cart' 2 %}">
+                {% csrf_token %}
+                <button type="submit" class="btn">Add to Cart</button>
+            </form>
         </div>
 
         <div class="card">
             <img src="{%static 'images/backgr.jpg' %}" alt="Special Latte" class="card-img">
             <h3>Special Latte</h3>
             <p>Creamy and smooth for your daily delight.</p>
-            <a href="#" class="btn">Add to Cart</a>
+            <form method="POST" action="{% url 'add_to_cart' 3 %}">
+                {% csrf_token %}
+                <button type="submit" class="btn">Add to Cart</button>
+            </form>
         </div>
 
 
 
-        <!-- Dynamic Cards from Admin -->
+
         {% for coffee in coffee_list %}
         <div class="card">
 
@@ -48,5 +57,5 @@
         </div>
         {% endfor %}
     </div>
-</section>  
+</section>
 {% endblock %}

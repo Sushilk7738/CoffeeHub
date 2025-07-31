@@ -7,6 +7,16 @@ class Coffee(models.Model):
     flavour = models.CharField(max_length=15)
     price = models.FloatField()
     image = models.ImageField(upload_to="images/", blank=True, null=True)
+    description = models.TextField(blank=True , null= True)
     
     def get_absolute_url(self):
         return reverse('cafe')
+    
+    
+class CartItem(models.Model):
+    coffee = models.ForeignKey(Coffee , on_delete= models.CASCADE)
+    quantity =  models.PositiveIntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.coffee.name} x {self.quantity}"

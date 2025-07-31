@@ -10,10 +10,10 @@ body {
     /* background-size: cover;
     background-position: center;
     background-repeat: no-repeat; */
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    /* min-height: 100vh; */
 }
 
 main {
@@ -168,20 +168,23 @@ footer {
     font-size: 2.5rem;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 40px;
+    margin-top: 20px;
+    margin-bottom: 10px;
     color: #4e342e;
 }
 
 
 .card-container {
     display: grid;
-    row-gap: 20px;
-    column-gap: 60px;
-    padding: 20px;
-    justify-content: center;
-    cursor: pointer;
     grid-template-columns: repeat(3, 250px);
+    justify-content: center;
+    column-gap: 60px;
+    row-gap: 40px;
+    padding: 20px;
+    padding-bottom: 40px;
+    cursor: pointer;
 }
+
 
 .card-img {
     width: 100%;
@@ -195,9 +198,10 @@ footer {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 15px;
+    padding: 12px;
     width: 100%;
     max-width: 250px;
+    margin-bottom: 10px;
     text-align: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -259,41 +263,110 @@ footer {
 
 
 
-/* ==========Detail page styling=========== */
 
 
-.detail-section {
-    max-width: 600px;
-    margin: 50px auto;
+
+/* ==================Cofee_detail page styling=================== */
+
+
+
+.coffee-detail-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.coffee-detail-hero {
     padding: 20px;
-    background-color: #fff9f0;
-    border: 1px solid black;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    text-align: left;
+    background-color: #f9f9f9;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
-.detail-section h3 {
-    font-size: 22px;
-    color: #b22222;
-    margin-bottom: 20px;
-    line-height: 1.6;
+
+.coffee-detail-main {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    align-items: flex-start;
+    flex-wrap: wrap;
 }
 
-.detail-section a {
+
+.coffee-detail-image {
+    flex: 1 1 500px;
+    max-width: 500px;
+}
+
+.coffee-detail-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 15px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transform-origin: center center;
+}
+
+.coffee-detail-image img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+}
+
+
+
+.coffee-detail-info {
+    flex: 1 1 500px;
+}
+
+.coffee-detail-info h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.coffee-detail-info p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+.coffee-description {
+    background-color: #fff;
+    padding: 30px;
+    margin-top: 40px;
+    border-radius: 14px;
+    font-size: 1.15rem;
+    color: #222;
+    font-weight: 400;
+    line-height: 1.8;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.coffee-description:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+
+.back-to-list {
+    margin-top: 30px;
+}
+
+.back-to-list a {
     display: inline-block;
     text-decoration: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    color: whitesmoke;
-    font-weight: bold;
-    margin-right: 10px;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
 
-.detail-section a[href*="update"] {
-    background-color: green;
-}
-
-.detail-section a[href*="delete"] {
-    background-color: red;
+.back-to-list a:hover {
+    background-color: #555;
 }

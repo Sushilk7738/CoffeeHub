@@ -1,37 +1,31 @@
 {% extends 'base.html' %}
-
-
 {% block content %}
-    
-    <section class="detail-section">
+<div class="coffee-detail-container">
 
-        <h3 style="color: red;">
-            Detail of {{coffee.name}}
-            <hr>
-            Flavour : {{coffee.flavour}}
-            Price   : {{coffee.price}}
-        </h3>
-    
-    <a href="/update/{{coffee.id}}" >Update Coffee</a>
-    <a href="/delete/{{coffee.id}}" >Delete Coffee</a>
-    
-</section>
+    <section class="coffee-detail-hero">
+        <!-- Group image and info together -->
+        <div class="coffee-detail-main">
+            <div class="coffee-detail-image">
+                {% if coffee.image %}
+                <img src="{{ coffee.image.url }}" alt="{{ coffee.name }}">
+                {% endif %}
+            </div>
+
+            <div class="coffee-detail-info">
+                <h2>{{coffee.name}}</h2>
+                <p>Flavour: {{ coffee.flavour }}</p>
+                <p>Price: ${{ coffee.price }}</p>
+            </div>
+        </div>
+
+        <div class="coffee-description">
+            {{ coffee.description }}
+        </div>
+    </section>
+
+    <div class="back-to-list">
+        <a href="{% url 'cafe' %}">← Back to All Coffees</a>
+    </div>
+
+</div>
 {% endblock %}
-</html>
-
-
-
-
-
-<!-- 
-    <style>
-        a {
-            display: inline-block;
-            text-decoration: none;
-            padding: 10px;
-            border: 1px solid black;
-            border-radius: 5px;
-            margin-left: 10px;
-        }
-    </style>
-</head> -->
