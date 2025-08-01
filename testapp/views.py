@@ -33,10 +33,14 @@ class CoffeeDeleteView(DeleteView):
     success_url = reverse_lazy("cafe")
     
 class AddToCartView(View):
-    def post(self, request, coffee_id):
-        coffee = get_object_or_404(Coffee, id= coffee_id)
+    def post(self, request, pk):
+        coffee = get_object_or_404(Coffee, id=pk)
+        print(f"Adding to cart: {coffee.name}")
         cart_item , created = CartItem.objects.get_or_create(coffee=coffee)
         if not created:
             cart_item.quantity += 1
             cart_item.save()
-        return redirect('coffee_list')
+            print("Existing item - quantity increased")
+        else:
+            print("New item added to cart")
+        return redirect('cafe')
