@@ -33,14 +33,51 @@ class CoffeeDeleteView(DeleteView):
     success_url = reverse_lazy("cafe")
     
 class AddToCartView(View):
-    def post(self, request, pk):
+    def post(self,request, pk):
+        print("Add to cart view hit ✅") 
         coffee = get_object_or_404(Coffee, id=pk)
-        print(f"Adding to cart: {coffee.name}")
-        cart_item , created = CartItem.objects.get_or_create(coffee=coffee)
-        if not created:
-            cart_item.quantity += 1
-            cart_item.save()
-            print("Existing item - quantity increased")
+        cart = request.session.get('cart' ,  {})
+
+        item_id = str(pk)
+    
+        if item_id in cart:
+            cart[item_id]['quantity'] +=1
         else:
-            print("New item added to cart")
-        return redirect('cafe')
+            cart[item_id] = {
+                'coffee_id' : coffee.id,
+                'name' : coffee.name,
+                'price' : float(coffee.price),
+                'quantity': 1
+            }
+        
+        request.session['cart'] = cart
+        
+        return redirect('cart')
+    
+
+class CartView(View):
+    def get(self, request):
+        cart = request.session.get('cart' , {})
+        cart_items = []
+        total_price = 0
+
+        for pk, item in cart.items():
+            try:
+                coffee = get_object_or_404(Coffee, id= item['coffee_id'])
+                subtotal = item['price'] * item['quantity']
+                total_price += subtotal
+                
+                cart_items.append({
+                    'coffee' : coffee,
+                    'quantity': item['quantity'],
+                    'price': item['price'],
+                    'subtotal': subtotal,
+                })
+                
+            except Coffee.DoesNotExist:
+                continue
+        
+        return render(request, 'testapp/cart.html', {
+            'cart_items' :cart_items,
+            'total_price' : total_price, 
+        })

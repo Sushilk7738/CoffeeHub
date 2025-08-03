@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Your Cart
+{% endblock %}
+
+
+{% block content %}
+<section class="cart-section">
+    <h1>Your Cart</h1>
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Coffee</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.coffee.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.price|floatformat:2 }}</td>
+                <td>₹{{ item.subtotal|floatformat:2 }} </td>
+            </tr>
+
+            {% endfor %}
+            <tr>
+                <td colspan="3"><strong>Total:</strong></td>
+                <td><strong>₹{{ total_price|floatformat:2 }}</strong></td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+{% endblock %}

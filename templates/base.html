@@ -28,6 +28,9 @@
             ☰
         </button>
 
+        <a href="{% url 'cart' %}" class="cart-link">
+            🛒 Cart ({{ request.session.cart|length|default:0 }})
+        </a>
     </nav>
 
     <main>

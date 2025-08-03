@@ -33,6 +33,7 @@ urlpatterns = [
     path('update/<int:pk>/', views.CoffeeUpdateView.as_view()),
     path('delete/<int:pk>/', views.CoffeeDeleteView.as_view()),
     path('add-to-cart/<int:pk>/', views.AddToCartView.as_view(), name= 'add_to_cart'),
+    path('cart/', views.CartView.as_view(), name= 'cart'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
