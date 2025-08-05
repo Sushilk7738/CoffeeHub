@@ -375,7 +375,7 @@ footer {
 
 
 
- /* ==============Cart styling============= */
+/* ==============Cart styling============= */
 
 .cart-section {
     max-width: 900px;
@@ -398,7 +398,7 @@ footer {
     border: 1px solid black;
 }
 
-.cart-table thead  {
+.cart-table thead {
     background-color: #1c1c1c;
     color: #ffffff;
 }
@@ -406,7 +406,8 @@ footer {
 .cart-table th {
     padding: 12px 16px;
     text-align: left;
-    border-bottom: 2px solid #8B4513;;
+    border-bottom: 2px solid #8B4513;
+    ;
 }
 
 .cart-table td {
@@ -414,4 +415,53 @@ footer {
     border-bottom: 1px solid #ccc;
     color: #333;
     background-color: #fff;
+}
+
+
+
+
+
+
+/*==============About page styling================= */
+
+.about-section {
+    background-color: #fffaf5;
+    padding: 60px 20px;
+    color: #3e2723;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+}
+
+.about-section h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #4e342e;
+    font-weight: bold;
+}
+
+.about-section p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto 40px auto;
+    color: #5d4037;
+    line-height: 1.6;
+}
+
+.about-image {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.about-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease-in-out;
+}
+
+.about-image img:hover {
+    transform: scale(1.03);
 }

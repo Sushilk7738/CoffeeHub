@@ -81,3 +81,7 @@ class CartView(View):
             'cart_items' :cart_items,
             'total_price' : total_price, 
         })
+        
+class About_View(TemplateView):
+    template_name = 'testapp/about.html'
+    
