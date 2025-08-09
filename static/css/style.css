@@ -417,10 +417,24 @@ footer {
     background-color: #fff;
 }
 
+.back-button-container {
+    text-align: center;
+    margin: 40px 0;
+}
 
+.back-btn {
+    display: inline-block;
+    background-color: #1c1c1c;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
 
-
-
+.back-btn:hover {
+    background-color: #8B4513;
+}
 
 /*==============About page styling================= */
 
@@ -464,4 +478,98 @@ footer {
 
 .about-image img:hover {
     transform: scale(1.03);
+}
+
+
+
+
+
+
+
+/* ===============Contact-page Styling================= */
+
+
+.contact-container {
+    margin-top: 0;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    background: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.contact-heading {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #4e342e;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.contact-heading h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.contact-heading p {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    color: #6d4c41;
+}
+
+
+.contact-card {
+    width: 100%;
+    max-width: 600px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    /* Visible border */
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: #6d4c41;
+}
+
+
+.contact-form button {
+    background-color: #6d4c41;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.contact-form button:hover {
+    background-color: #5d4037;
+    transform: scale(1.02);
+    cursor: pointer;
+}
+
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #4e342e;
 }

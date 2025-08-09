@@ -85,3 +85,6 @@ class CartView(View):
 class About_View(TemplateView):
     template_name = 'testapp/about.html'
     
+    
+class Contact_View(TemplateView):
+    template_name = 'testapp/contact.html'
