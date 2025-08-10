@@ -4,6 +4,19 @@
 {% block content %}
 <div class="contact-container">
     <div class="contact-heading">
+
+
+        {% if messages %}
+        <div class="messages">
+
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+
+        </div>
+        {% endif %}
+
+
         <h1>Get in Touch☕</h1>
         <p>We would love to hear from you! Please fill out the form below.</p>
     </div>

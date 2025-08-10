@@ -1,8 +1,10 @@
 from django.shortcuts import render, HttpResponse
+from django.contrib import messages
 from django.views import View
 from django.views.generic import TemplateView ,CreateView, ListView , DetailView, UpdateView, DeleteView
 from testapp.models import Coffee, CartItem
 from django.urls import reverse_lazy
+from .forms import ContactForm
 from django.shortcuts import redirect, get_object_or_404
 
 # Create your views here.
@@ -86,5 +88,15 @@ class About_View(TemplateView):
     template_name = 'testapp/about.html'
     
     
-class Contact_View(TemplateView):
-    template_name = 'testapp/contact.html'
+class Contact_View(View):
+    def get(self, request):
+        form = ContactForm()
+        return render(request, 'testapp/contact.html', {'form' : form})
+
+    def post(self, request):
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Thank you for showing your love! We're grateful for your message.")
+            return redirect('contact')
+        return render(request, 'testapp/contact.html', {'form' : form})
