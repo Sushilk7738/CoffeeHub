@@ -19,6 +19,8 @@ from django.urls import path
 from testapp import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+
 
 
 
@@ -36,6 +38,9 @@ urlpatterns = [
     path('cart/', views.CartView.as_view(), name= 'cart'),
     path('about/', views.About_View.as_view(), name='about'),
     path('contact/', views.Contact_View.as_view(), name='contact'),
+    # path('checkout/', views.CheckoutPageView.as_view(), name= 'checkout'),
+    path('checkout/', views.CheckoutView.as_view(), name='checkout'),
+    path('success/', TemplateView.as_view(template_name="testapp/success.html"), name='success'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

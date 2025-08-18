@@ -2,9 +2,9 @@ from django.shortcuts import render, HttpResponse
 from django.contrib import messages
 from django.views import View
 from django.views.generic import TemplateView ,CreateView, ListView , DetailView, UpdateView, DeleteView
-from testapp.models import Coffee, CartItem
+from testapp.models import Coffee, CartItem, Order
 from django.urls import reverse_lazy
-from .forms import ContactForm
+from .forms import ContactForm, CheckoutForm
 from django.shortcuts import redirect, get_object_or_404
 
 # Create your views here.
@@ -100,3 +100,20 @@ class Contact_View(View):
             messages.success(request, "Thank you for showing your love! We're grateful for your message.")
             return redirect('contact')
         return render(request, 'testapp/contact.html', {'form' : form})
+
+
+# class CheckoutPageView(TemplateView):
+#     template_name = 'testapp/checkout.html'
+
+
+class CheckoutView(View):
+    def get(self, request):
+        form = CheckoutForm()
+        return render(request, 'testapp/checkout.html', {'form': form})
+
+    def post(self, request):
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("success")
+        return render(request, 'testapp/checkout.html', {'form': form})
