@@ -417,6 +417,11 @@ footer {
     background-color: #fff;
 }
 
+.cart-table tr:last-child td {
+    border-bottom: none;
+}
+
+
 .back-button-container {
     text-align: center;
     margin: 40px 0;
@@ -429,12 +434,36 @@ footer {
     padding: 10px 20px;
     border-radius: 6px;
     text-decoration: none;
+    font-weight: bold;
     transition: background-color 0.3s ease;
 }
 
 .back-btn:hover {
-    background-color: #8B4513;
+    background-color: #4e342e;
 }
+
+
+.remove-btn {
+    display: inline-block;
+    padding: 6px 8px;
+    background-color: #a52a2a;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 /*==============About page styling================= */
 
@@ -520,6 +549,34 @@ footer {
 }
 
 
+.message-container {
+    margin: 15px 0;
+    padding: 12px;
+    background-color: #f4e1d2;
+    color: #3e2723; 
+    border-left: 5px solid #8d6e63; 
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-out {
+    animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+
+
+
 .contact-card {
     width: 100%;
     max-width: 600px;
@@ -572,4 +629,111 @@ footer {
     margin-bottom: 8px;
     font-weight: bold;
     color: #4e342e;
+}
+
+
+
+/* ===============Checkout-page Styling================= */
+
+
+.checkout-container {
+    max-width: 600px;
+    margin: 4rem auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.checkout-form input,
+.checkout-form textarea {
+    width: 100%;
+    max-width: 450px;   
+    padding: 10px 14px; 
+    margin: 8px 0;      
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    box-sizing: border-box; 
+}
+
+.checkout-form button {
+    background-color: #5C4033;
+    color: #fff;
+    border: none;
+    padding: 12px 10px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    width: 100%;
+    max-width: 150px;
+    margin-top: 12px;
+
+}
+
+.checkout-form button:hover {
+    background-color: #3e2c23;
+    transform: scale(1.05);
+}
+
+
+/* ===============Checkout-button Styling================= */
+
+
+.checkout-btn-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.checkout-btn {
+    background-color: #4e342e;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.checkout-btn:hover {
+    background-color: #1c1c1c;
+}
+
+
+
+
+
+/* ================================  Success page styling =============================== */
+
+.success-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    background-color: #fafafa;
+}
+
+.success-card {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    max-width: 500px;
+}
+
+.success-card h2 {
+    font-size: 26px;
+    color: #4e342e;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.success-card p {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 25px;
+    line-height: 1.6;
 }
