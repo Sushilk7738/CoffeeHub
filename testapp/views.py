@@ -7,13 +7,13 @@ from django.urls import reverse_lazy
 from .forms import ContactForm, CheckoutForm
 from django.shortcuts import redirect, get_object_or_404
 
-# Create your views here.
+    # Create your views here.
 
 class HomeView(View):
     def get(self, request):
         return render(request,'testapp/home.html')
     
-    
+        
 class CoffeeCreateView(CreateView):
     model = Coffee
     fields = "__all__"
@@ -26,6 +26,22 @@ class CoffeeListView(ListView):
 class CoffeeDetailView(DetailView):
     model = Coffee
     context_object_name = 'coffee'
+    template_name = 'testapp/coffee_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        coffee = getattr(self,'object', None)
+        try:
+            context['reviews'] = coffee.reviews.all().order_by('-created_at')
+        
+        except Exception:
+            context['reviews'] = []
+
+        return context
+    
+    
+    
+    
 class CoffeeUpdateView(UpdateView):
     model = Coffee
     fields = ['flavour', 'price', 'image', 'description']
@@ -55,6 +71,17 @@ class AddToCartView(View):
         request.session['cart'] = cart
         
         return redirect('cart')
+    
+class RemoveFromCartView(View):
+    def post(self, request, pk):
+        cart = request.session.get('cart', {})    
+
+        if str(pk) in cart:
+            del cart[str(pk)]
+            request.session['cart'] = cart
+
+        return redirect('cart')
+    
     
 
 class CartView(View):
@@ -109,11 +136,47 @@ class Contact_View(View):
 class CheckoutView(View):
     def get(self, request):
         form = CheckoutForm()
-        return render(request, 'testapp/checkout.html', {'form': form})
+        return render(request, 'testapp/checkout.html', {'form': form, 'order': None})
 
     def post(self, request):
         form = CheckoutForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect("success")
-        return render(request, 'testapp/checkout.html', {'form': form})
+            order = form.save(commit=False)
+
+            cart = request.session.get('cart', {})
+            total_price = 0
+            items = []
+
+            for pk, item in cart.items():
+                total_price += item['price'] * item['quantity']
+                coffee = get_object_or_404(Coffee, id=item['coffee_id'])
+                items.append(coffee)
+
+            order.total_price = total_price
+            order.save()
+            order.items.add(*items)
+
+            # cart clear
+            request.session['cart'] = {}
+
+        
+            return redirect('success')
+
+        
+        return render(request, 'testapp/checkout.html', {'form': form, 'order': None})
+
+
+
+class OrderListView(ListView):
+    model = Order
+    template_name = 'testapp/order_list.html'
+    context_object_name = 'orders'
+    ordering = ['-created_at']
+
+
+class MarkDeliveryView(View):
+    def post(self, request, pk):
+        order = get_object_or_404(Order, pk = pk)
+        order.status = 'delivered'
+        order.save()
+        return redirect('order_list')

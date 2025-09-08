@@ -21,6 +21,32 @@
         <div class="coffee-description">
             {{ coffee.description }}
         </div>
+
+        <section class="coffee-reviews">
+            <h3>Customer Reviews</h3>
+
+            {% if reviews %}
+            <ul>
+
+                {% for review in reviews %}
+                <li>
+                    <strong>{{ review.user.username}}</strong>
+                    ({{ review.rating }}/5) <br>
+                    ({{ review.comment }}) <br>
+                    <small>{{ review.created_at }}</small>
+                </li>
+                {% endfor %}
+
+            </ul>
+            {% else %}
+            <p>No Reviews yet. Be the first to review this coffee! </p>
+            {% endif %}
+
+        </section>
+
+
+
+
     </section>
 
     <div class="back-to-list">
