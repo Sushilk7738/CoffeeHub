@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'testapp/css/about.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="about-section">
+    <div class="about-content">
+        <h1>Our Story ☕</h1>
+        <p>
+            Welcome to <strong>Maid Latte</strong>, where every cup tells a story.
+            We started with a simple dream — to serve coffee that warms hearts and inspires conversations.
+            From the aroma of freshly ground beans to the last sip, we make sure every experience is crafted with love.
+        </p>
+
+        <p>
+            Our mission is to bring together a community of coffee lovers who appreciate authenticity, quality, and
+            passion.
+            Whether you're here for your morning espresso or an evening latte, Maid Latte promises comfort in every cup.
+        </p>
+
+        <div class="about-image">
+            <img src="{% static 'testapp/images/background.jpg' %}" alt="Our Coffee Shop">
+
+        </div>
+    </div>
+</section>
+{% endblock %}

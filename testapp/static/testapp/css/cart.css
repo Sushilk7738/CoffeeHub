@@ -1,0 +1,135 @@
+/* ====================== Cart Page Styling ====================== */
+
+.cart-section {
+    max-width: 900px;
+    margin: 80px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid #ccc;
+    font-family: 'Montserrat', sans-serif;
+    color: #1c1c1c;
+    text-align: center;
+}
+
+.cart-section h1 {
+    font-size: 2rem;
+    color: #4e342e;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+/* ---- Cart Table ---- */
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 16px;
+    color: #1c1c1c;
+}
+
+.cart-table thead {
+    background-color: #1c1c1c;
+    color: #ffffff;
+}
+
+.cart-table th,
+.cart-table td {
+    padding: 14px 18px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.cart-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Total Row */
+.cart-table tr:last-child strong {
+    color: #4e342e;
+}
+
+
+
+
+/* ---- Buttons ---- */
+.remove-btn {
+    background-color: #a52a2a;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.remove-btn:hover {
+    background-color: #7a1f1f;
+    transform: translateY(-2px);
+}
+
+/* ---- Back Button ---- */
+.back-button-container {
+    text-align: center;
+    margin: 40px 0 20px;
+}
+
+.back-btn {
+    display: inline-block;
+    background-color: #1c1c1c;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.back-btn:hover {
+    background-color: #4e342e;
+    transform: scale(1.05);
+}
+
+/* ---- Checkout Button ---- */
+.checkout-btn-container {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.checkout-btn {
+    background-color: #4e342e;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.checkout-btn:hover {
+    background-color: #1c1c1c;
+    transform: scale(1.05);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+    .cart-section {
+        margin: 40px 15px;
+        padding: 20px;
+    }
+
+    .cart-table th,
+    .cart-table td {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .checkout-btn,
+    .back-btn {
+        width: 80%;
+        display: block;
+        margin: 10px auto;
+    }
+}

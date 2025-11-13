@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'testapp/css/cart.css' %}">
+{% endblock %}
+
+
 {% block title %}
 Your Cart
 {% endblock %}
@@ -15,6 +21,7 @@ Your Cart
                 <th>Qty</th>
                 <th>Price</th>
                 <th>Subtotal</th>
+                <th>Action</th>
             </tr>
         </thead>
 
@@ -26,7 +33,14 @@ Your Cart
                 <td>{{ item.quantity }}</td>
                 <td>{{ item.price|floatformat:2 }}</td>
                 <td>₹{{ item.subtotal|floatformat:2 }} </td>
+                <td>
+                    <form method="post" action="{% url 'remove-from-cart' item.coffee.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="remove-btn">Remove</button>
+                    </form>
+                </td>
             </tr>
+            
 
             {% endfor %}
             <tr>
@@ -36,6 +50,11 @@ Your Cart
         </tbody>
     </table>
 </section>
+
+<div class="checkout-btn-container">
+    <a href="{% url 'checkout' %}" class="checkout-btn">Proceed to Checkout</a>
+</div>
+
 
 <div class="back-button-container">
     <a href="{% url 'cafe' %}" class="back-btn">← Back to Our Coffees</a>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Coffee ,CartItem, Contact
+from .models import Coffee ,CartItem, Contact, Order, Review
 # Register your models here.
 
 class CoffeeAdmin(admin.ModelAdmin):
@@ -13,3 +13,12 @@ class ContactAdmin(admin.ModelAdmin):
     list_display = ['name', 'email', 'created_at']
     search_fields = ('name', 'email')
     list_filter = ('created_at',)
+    
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['name', 'card_number']
+admin.site.register(Order, OrderAdmin)
+
+
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ['name', 'rating']
+admin.site.register(Review, ReviewAdmin)

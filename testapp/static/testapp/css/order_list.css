@@ -1,0 +1,101 @@
+/* ================= ORDER HISTORY PAGE STYLING ================= */
+
+.order-history {
+    max-width: 800px;
+    margin: 60px auto;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+    color: #2b2b2b;
+}
+
+.order-history h2 {
+    text-align: center;
+    color: #4b2e2e;
+    font-weight: 700;
+    font-size: 28px;
+    margin-bottom: 25px;
+}
+
+/* ===== Orders list ===== */
+.order-history ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.order-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f7f5;
+    border-left: 5px solid #6f4e37;
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.order-card:hover {
+    transform: scale(1.02);
+    background-color: #f0ece9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Order details */
+.order-info {
+    flex: 1;
+}
+
+.order-id {
+    font-weight: bold;
+    color: #5a3f2a;
+    display: block;
+}
+
+.order-meta {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+/* Total section */
+.order-total {
+    color: #3e2f23;
+    font-weight: 600;
+    margin-right: 20px;
+}
+
+/* Status badge */
+.order-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    color: #fff;
+}
+
+.order-status.delivered {
+    background-color: #4CAF50;
+}
+
+.order-status.pending {
+    background-color: #FFC107;
+    color: #000;
+}
+
+.order-status.cancelled {
+    background-color: #E53935;
+}
+
+/* Empty state */
+.no-orders {
+    text-align: center;
+    font-size: 1rem;
+    color: #555;
+    background-color: #f5f2ef;
+    padding: 15px;
+    border-radius: 8px;
+}

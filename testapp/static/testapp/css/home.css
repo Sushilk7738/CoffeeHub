@@ -1,0 +1,40 @@
+/* ===== Hero Section Styles ===== */
+
+.hero {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-image: url("../images/backgr.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+.hero-content {
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 20px 40px;
+    border-radius: 10px;
+}
+
+.hero-btn {
+    display: inline-block;
+    background-color: #6f4e37;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.hero-btn:hover {
+    background-color: #462d1a;
+}

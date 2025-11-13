@@ -1,0 +1,94 @@
+/* ================= SUCCESS PAGE STYLING ================= */
+
+.success-container {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f2ef;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.success-card {
+    background-color: #fff;
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    transition: all 0.3s ease;
+}
+
+.success-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.success-icon {
+    font-size: 60px;
+    margin-bottom: 15px;
+    color: #6f4e37;
+    animation: bounce 1.2s ease infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.success-card h2 {
+    font-size: 26px;
+    color: #4b2e2e;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.success-card p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+/* Buttons */
+.success-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+    display: inline-block;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #6f4e37;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #4b2e2e;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: #eee;
+    color: #4b2e2e;
+}
+
+.btn-secondary:hover {
+    background-color: #ddd;
+    transform: translateY(-2px);
+}

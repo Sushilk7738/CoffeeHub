@@ -69,6 +69,43 @@ ul li a:hover {
     cursor: pointer;
 }
 
+ /* updated nav style */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.auth-btn,
+.logout-btn {
+    background: #6f4e37;
+    color: #fff;
+    padding: 7px 18px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.auth-btn:hover,
+.logout-btn:hover {
+    background: #4b2e2e;
+    transform: translateY(-2px);
+}
+
+.signup-btn {
+    background: #4b2e2e;
+}
+
+.signup-btn:hover {
+    background: #2f1a1a;
+}
+
+
+
 
 /* ============================= */
 /*  Responsive Navbar Styles   */
@@ -88,6 +125,28 @@ ul li a:hover {
     .menu-toggle {
         display: block;
     }
+}
+
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logout-btn {
+    background: #6f4e37;
+    color: #fff;
+    padding: 6px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: #4b2e2e;
 }
 
 
@@ -553,8 +612,8 @@ footer {
     margin: 15px 0;
     padding: 12px;
     background-color: #f4e1d2;
-    color: #3e2723; 
-    border-left: 5px solid #8d6e63; 
+    color: #3e2723;
+    border-left: 5px solid #8d6e63;
     border-radius: 6px;
     font-family: 'Poppins', sans-serif;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -562,8 +621,15 @@ footer {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .fade-out {
@@ -571,7 +637,10 @@ footer {
 }
 
 @keyframes fadeOut {
-    to { opacity: 0; transform: translateY(-10px); }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
 }
 
 
@@ -648,14 +717,14 @@ footer {
 .checkout-form input,
 .checkout-form textarea {
     width: 100%;
-    max-width: 450px;   
-    padding: 10px 14px; 
-    margin: 8px 0;      
+    max-width: 450px;
+    padding: 10px 14px;
+    margin: 8px 0;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 1rem;
     outline: none;
-    box-sizing: border-box; 
+    box-sizing: border-box;
 }
 
 .checkout-form button {
@@ -737,3 +806,352 @@ footer {
     margin-bottom: 25px;
     line-height: 1.6;
 }
+
+
+
+
+
+
+
+
+/* ================================  Order_History page styling =============================== */
+
+
+.order-history {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.order-history h2 {
+    color: #5c3d2e;
+    margin-bottom: 20px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.order-history ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.order-history li {
+    padding: 12px;
+    margin: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+    color: #333;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.order-id {
+    font-weight: bold;
+    color: #5c3d2e;
+}
+
+.order-meta {
+    font-size: 14px;
+    color: #666;
+}
+
+.order-price {
+    margin-left: 15px;
+    font-weight: bold;
+    color: brown;
+}
+
+.order-status {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.order-status.delivered {
+    background-color: #4CAF50;
+}
+
+.order-status.pending {
+    background-color: #FFC107;
+    color: #000;
+}
+
+.order-status.cancelled {
+    background-color: #dc3545;
+}
+
+
+
+
+/* ================================  Reviews  styling =============================== */
+
+
+.coffee-reviews ul {
+    list-style: none;
+    padding: 0;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.coffee-reviews li {
+    background-color: #fff;
+    border-left: 4px solid #6bf43f;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.coffee-reviews strong {
+    color: #333;
+}
+
+.coffee-reviews small {
+    color: #777;
+    font-size: 0.85em;
+}
+
+.coffee-reviews li .review-rating {
+    color: #6b4f3f;
+    font-size: 1.2em;
+    margin-left: 5px;
+}
+
+.add-review form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    ;
+}
+
+
+.add-review form input,
+.add-review form textarea {
+    width: 80%;
+    /* full width */
+    padding: 12px 15px;
+    /* enough space inside */
+    margin-bottom: 15px;
+    /* spacing between fields */
+    border: 1px solid #6b4f3f;
+    /* brown border matching theme */
+    border-radius: 8px;
+    /* rounded corners */
+    font-size: 1em;
+    /* readable font size */
+    background-color: #fff;
+    /* white background */
+    color: #333;
+    /* dark text for readability */
+    transition: all 0.3s ease;
+    /* smooth hover/focus animation */
+}
+
+.add-review form input:focus,
+.add-review form textarea:focus {
+    border-color: #3e2f23;
+    /* darker brown on focus */
+    box-shadow: 0 0 8px rgba(107, 79, 63, 0.4);
+    /* soft glow on focus */
+    outline: none;
+    /* remove default outline */
+}
+
+
+
+
+/* ===================================Sign-up page styling======================================= */
+
+.signup-container {
+    max-width: 420px;
+    margin: 50px auto;
+    padding: 35px 25px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+.signup-container h2 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #4b2e2e;   
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+
+.signup-form label{
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #6f4e37;
+    margin: 8px 0 4px;
+    text-align: left;
+    padding-left: 40px;
+    letter-spacing: 0.5px;
+}
+
+
+.signup-form input {
+    width: 80%;
+    padding: 10px 14px;
+    margin: 12px 0; 
+    border: 2px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 15px;
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.signup-form input:focus {
+    border-color: #6f4e37;
+    background-color: #fff;
+    box-shadow: 0 0 6px rgba(111, 78, 55, 0.4);
+    outline: none;
+}
+
+.signup-form button {
+    padding: 12px 30px;
+    margin-top: 15px;
+    background-color: #6f4e37;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.signup-form button:hover{
+    background-color: #4b2e2e;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);;
+}
+
+
+.switch-auth {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #555;
+}
+
+.switch-auth a {
+    color: #6f4e37;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.switch-auth a:hover {
+    text-decoration: underline;
+}
+
+
+
+
+
+/* ===================================Login page styling======================================= */
+
+.login-container {
+    max-width: 420px;
+    margin: 50px auto;
+    padding: 35px 25px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+.login-container h2 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #4b2e2e;   
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+
+.login-form label{
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #6f4e37;
+    margin: 8px 0 4px;
+    text-align: left;
+    padding-left: 40px;
+    letter-spacing: 0.5px;
+}
+
+
+.login-form input {
+    width: 80%;
+    padding: 10px 14px;
+    margin: 12px 0; 
+    border: 2px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 15px;
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.login-form input:focus {
+    border-color: #6f4e37;
+    background-color: #fff;
+    box-shadow: 0 0 6px rgba(111, 78, 55, 0.4);
+    outline: none;
+}
+
+.login-form button {
+    padding: 12px 30px;
+    margin-top: 15px;
+    background-color: #6f4e37;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.login-form button:hover{
+    background-color: #4b2e2e;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);;
+}
+
+
+.login-switch-auth {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #555;
+}
+
+.login-switch-auth a {
+    color: #6f4e37;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-switch-auth a:hover {
+    text-decoration: underline;
+}
+
+
+
+

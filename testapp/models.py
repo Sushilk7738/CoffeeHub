@@ -43,7 +43,7 @@ STATUS_CHOICES = [
         
 class Order(models.Model):
     name = models.CharField(max_length=100)
-    address = models.TextField()
+    address = models.TextField()    
     card_number = models.CharField(max_length=16)
     total_price = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
     items = models.ManyToManyField(Coffee)

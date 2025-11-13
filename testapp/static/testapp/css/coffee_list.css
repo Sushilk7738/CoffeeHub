@@ -1,0 +1,107 @@
+/* ===== Our Coffees Page (cafe.html) ===== */
+
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    color: #4e342e;
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(3, 250px);
+    justify-content: center;
+    column-gap: 60px;
+    row-gap: 40px;
+    padding: 20px 0 40px;
+    cursor: pointer;
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    width: 100%;
+    max-width: 250px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin: 10px 0 5px;
+    font-weight: 650;
+}
+
+.card p {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 5px 0;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #6f4e37;
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #5a3f2a;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+
+/* dynamic card styling */
+
+#coffee-container {
+    display: grid;
+    grid-template-columns: repeat(3, 250px);
+    justify-content: center;
+    column-gap: 60px;
+    row-gap: 40px;
+    padding: 10px 0 20px;
+    margin: 0 auto;
+}
+
+
+.body {
+    overflow-x: hidden;
+}

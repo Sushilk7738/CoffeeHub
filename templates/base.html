@@ -1,36 +1,57 @@
-<!DOCTYPE html>
 {% load static %}
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Maid latte{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'testapp/css/base.css' %}">
+    {% block extra_css %}{% endblock %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <!-- Toastify JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 </head>
 
 <body>
     <!-- navbar -->
 
     <nav>
-        <h2>Maid Latte</h2>
+        <div class="nav-left">
+            <h2>Maid Latte</h2>
+        </div>
+
         <ul class="nav-opt">
             <li><a href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'cafe' %}">Our Coffees</a></li>
             <li><a href="{% url 'about' %}">About</a></li>
             <li><a href="{% url 'contact' %}">Contact</a></li>
+            <li><a href="{% url 'order_list' %}">Order History</a></li>
         </ul>
-        <button class="menu-toggle">
-            ☰
-        </button>
 
-        <a href="{% url 'cart' %}" class="cart-link">
-            🛒 Cart ({{ request.session.cart|length|default:0 }})
-        </a>
+        <div class="nav-right">
+            <a href="{% url 'cart' %}" class="cart-link">
+                🛒 Cart ({{ request.session.cart|length|default:0 }})
+            </a>
+
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}" class="auth-btn login-btn">Login</a>
+            <a href="{% url 'signup' %}" class="auth-btn signup-btn">Sign Up</a>
+            {% endif %}
+        </div>
+
     </nav>
 
     <main>

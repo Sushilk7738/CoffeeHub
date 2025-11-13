@@ -4,10 +4,16 @@ from django.views import View
 from django.views.generic import TemplateView ,CreateView, ListView , DetailView, UpdateView, DeleteView
 from testapp.models import Coffee, CartItem, Order
 from django.urls import reverse_lazy
-from .forms import ContactForm, CheckoutForm
+from .forms import ContactForm, CheckoutForm, ReviewForm
 from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LogoutView
+from .forms import CustomUserCreationForm
 
-    # Create your views here.
+
+
+# Create your views here.
 
 class HomeView(View):
     def get(self, request):
@@ -31,6 +37,7 @@ class CoffeeDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         coffee = getattr(self,'object', None)
+        context['form'] = ReviewForm()
         try:
             context['reviews'] = coffee.reviews.all().order_by('-created_at')
         
@@ -39,6 +46,16 @@ class CoffeeDetailView(DetailView):
 
         return context
     
+    def post(self,request, *args, **kwargs):
+        self.object = self.get_object()
+        form = ReviewForm(request.POST)
+
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.coffee = self.object
+            review.save()
+        return redirect('coffee_detail', pk= self.object.pk)
+
     
     
     
@@ -111,6 +128,8 @@ class CartView(View):
             'total_price' : total_price, 
         })
         
+        
+        
 class About_View(TemplateView):
     template_name = 'testapp/about.html'
     
@@ -172,6 +191,8 @@ class OrderListView(ListView):
     template_name = 'testapp/order_list.html'
     context_object_name = 'orders'
     ordering = ['-created_at']
+    
+
 
 
 class MarkDeliveryView(View):
@@ -180,3 +201,23 @@ class MarkDeliveryView(View):
         order.status = 'delivered'
         order.save()
         return redirect('order_list')
+    
+    
+
+
+# website authentication section starts here
+
+
+
+class UserLoginView(LoginView):
+    template_name = 'testapp/login.html'
+    success_url = reverse_lazy('home')
+
+class UserLogoutView(LogoutView):
+    template_name = 'testapp/logout.html'
+
+class SignUpView(CreateView):
+    form_class = CustomUserCreationForm
+    template_name = 'testapp/signup.html'
+    success_url = reverse_lazy('login')
+    

@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %} Coffee List {% endblock %}
+
+{% block content %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'testapp/css/coffee_list.css' %}">
+{% endblock %}
+
+<section class="card-section">
+
+    <h1 class="section-title">Our Coffees</h1>
+
+    <div class="card-container">
+
+
+        <!-- {% for coffee in coffee_list|slice:":3" %}
+            
+        <div class="card">
+
+            {% if coffee.image %}
+            <img src="{{ coffee.image.url }}" alt="{{ coffee.name }}" class="card-img">
+
+            {% endif %}
+            <h3>{{ coffee.name }}</h3>
+            <p>Flavour: {{ coffee.flavour }} </p>
+            <p><strong>Price:</strong>₹{{ coffee.price|floatformat:2 }}</p>
+            <form method="post" action="{% url 'add_to_cart' coffee.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn">Add to Cart</button>
+            </form>
+        </div>
+        {% endfor %} -->
+
+
+
+        <!-- {% for coffee in coffee_list|slice:"3:" %}
+        <div class="card">
+
+            {% if coffee.image %}
+            <img src="{{ coffee.image.url }}" alt="{{ coffee.name }}" class="card-img">
+            {% endif %}
+            <h3>{{ coffee.name }}</h3>
+            <p>Flavour: {{ coffee.flavour }} </p>
+            <p>Price: ${{ coffee.price }} </p>
+            <a href="/detail/{{ coffee.id }}" class="btn">View Details</a>
+        </div>
+        {% endfor %} -->
+        <div id="coffee-container" class="card-container"></div>
+    </div>
+</section>
+
+<script>
+    async function loadCoffees() {
+        const response = await fetch("/api/coffees/");
+        const coffees = await response.json();
+
+        const container = document.getElementById('coffee-container');
+        container.innerHTML = "";
+
+        coffees.forEach(coffee => {
+            container.innerHTML += `
+                <div class="card">
+                    <img src="${coffee.image}" alt="${coffee.name}" class="card-img">
+                    <h3>${coffee.name}</h3>
+                    <p>Flavour: ${coffee.flavour || "Not available"}</p>
+                    <p><strong>Price:</strong> ₹${coffee.price}</p>
+
+                    <button class="btn" onClick="addToCart(${coffee.id})">
+                        Add to Cart
+                    </button>
+                </div>
+            `;
+        });
+    }
+
+    loadCoffees();
+</script>
+
+<script>
+    async function addToCart(id) {
+        const response = await fetch("/api/cart/add/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                coffee_id: id,
+                quantity: 1
+            }),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            Toastify({
+                text: data.message,
+                duration: 1500,
+                gravity: "top",
+                postition: 'right',
+                backgroundColor: "#4CAF50",
+                style: {
+                    borderRadius: "8px",
+                    fontWeight: "600",
+                    color: "#fff",
+                }
+            }).showToast();
+        } else {
+            Toastify({
+                text: data.error || "Something went wrong!",
+                duration: 1500,
+                gravity: "top",
+                postition: 'right',
+                backgroundColor: "red",
+                style: {
+                    borderRadius: "8px",
+                    fontWeight: "600",
+                    color: "#fff",
+                }   
+            }).showToast();
+        }
+    }
+</script>
+{% endblock %}

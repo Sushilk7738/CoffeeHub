@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order Success{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'testapp/css/success.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="success-container">
+    <div class="success-card">
+        <div class="success-icon">☕</div>
+        <h2>Order Placed Successfully!</h2>
+        <p>Thank you for your purchase. Your freshly brewed coffee will be on its way soon!</p>
+        <div class="success-buttons">
+            <a href="{% url 'cafe' %}" class="btn-primary">Continue Shopping</a>
+            <a href="{% url 'order_list' %}" class="btn-secondary">View Orders</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+    

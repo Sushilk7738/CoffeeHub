@@ -4,6 +4,9 @@
 
 
 {% block content %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'testapp/css/home.css' %}">
+{% endblock %}
 <section class="hero">
     <div class="hero-overlay">
         <div class="hero-content">
