@@ -5,6 +5,7 @@ __pycache__/
 *.pyd
 *.pdb
 *.pyc
+.env
 
 # Virtual environment
 venv/
