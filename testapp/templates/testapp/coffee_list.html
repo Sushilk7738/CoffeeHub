@@ -1,125 +1,119 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
 {% block title %} Coffee List {% endblock %}
 
-{% block content %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'testapp/css/coffee_list.css' %}">
 {% endblock %}
 
+{% block content %}
 <section class="card-section">
-
     <h1 class="section-title">Our Coffees</h1>
-
-    <div class="card-container">
-
-
-        <!-- {% for coffee in coffee_list|slice:":3" %}
-            
-        <div class="card">
-
-            {% if coffee.image %}
-            <img src="{{ coffee.image.url }}" alt="{{ coffee.name }}" class="card-img">
-
-            {% endif %}
-            <h3>{{ coffee.name }}</h3>
-            <p>Flavour: {{ coffee.flavour }} </p>
-            <p><strong>Price:</strong>₹{{ coffee.price|floatformat:2 }}</p>
-            <form method="post" action="{% url 'add_to_cart' coffee.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn">Add to Cart</button>
-            </form>
-        </div>
-        {% endfor %} -->
-
-
-
-        <!-- {% for coffee in coffee_list|slice:"3:" %}
-        <div class="card">
-
-            {% if coffee.image %}
-            <img src="{{ coffee.image.url }}" alt="{{ coffee.name }}" class="card-img">
-            {% endif %}
-            <h3>{{ coffee.name }}</h3>
-            <p>Flavour: {{ coffee.flavour }} </p>
-            <p>Price: ${{ coffee.price }} </p>
-            <a href="/detail/{{ coffee.id }}" class="btn">View Details</a>
-        </div>
-        {% endfor %} -->
-        <div id="coffee-container" class="card-container"></div>
-    </div>
+    <div id="coffee-container" class="card-container"></div>
 </section>
 
+<!-- Toastify is loaded in base.html -->
 <script>
-    async function loadCoffees() {
+/* helper to read CSRF cookie for session fallback */
+function getCookie(name) {
+    const v = document.cookie.split('; ').find(row => row.startsWith(name + '='));
+    return v ? decodeURIComponent(v.split('=')[1]) : null;
+}
+
+async function loadCoffees() {
+    try {
         const response = await fetch("/api/coffees/");
         const coffees = await response.json();
-
         const container = document.getElementById('coffee-container');
         container.innerHTML = "";
 
         coffees.forEach(coffee => {
             container.innerHTML += `
                 <div class="card">
-                    <img src="${coffee.image}" alt="${coffee.name}" class="card-img">
+                    <img src="${coffee.image || '/static/testapp/images/coffeee.jpg'}" alt="${coffee.name}" class="card-img">
                     <h3>${coffee.name}</h3>
                     <p>Flavour: ${coffee.flavour || "Not available"}</p>
                     <p><strong>Price:</strong> ₹${coffee.price}</p>
-
-                    <button class="btn" onClick="addToCart(${coffee.id})">
-                        Add to Cart
-                    </button>
+                    <button class="btn" onclick="addToCart(${coffee.id})">Add to Cart</button>
                 </div>
             `;
         });
+    } catch (e) {
+        console.error('Failed to load coffees', e);
     }
+}
 
-    loadCoffees();
-</script>
+/* addToCart: JWT flow if token present, otherwise fallback to session view */
+async function addToCart(id) {
+    const access = localStorage.getItem("access");
 
-<script>
-    async function addToCart(id) {
-        const response = await fetch("/api/cart/add/", {
+    if (access) {
+        // JWT API flow
+        const res = await fetch("/api/cart/add/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": "Bearer " + access
             },
-            body: JSON.stringify({
-                coffee_id: id,
-                quantity: 1
-            }),
+            body: JSON.stringify({ coffee_id: id, quantity: 1 })
         });
 
-        const data = await response.json();
-        if (response.ok) {
-            Toastify({
-                text: data.message,
-                duration: 1500,
-                gravity: "top",
-                postition: 'right',
-                backgroundColor: "#4CAF50",
-                style: {
-                    borderRadius: "8px",
-                    fontWeight: "600",
-                    color: "#fff",
-                }
-            }).showToast();
+        const data = await res.json().catch(() => ({}));
+        if (res.ok) {
+            Toastify({ text: data.message || "Added to cart", duration: 1200, style: { background: "linear-gradient(#4CAF50,#3aa04a)" } }).showToast();
+            if (window.loadCartCount) loadCartCount();
         } else {
-            Toastify({
-                text: data.error || "Something went wrong!",
-                duration: 1500,
-                gravity: "top",
-                postition: 'right',
-                backgroundColor: "red",
-                style: {
-                    borderRadius: "8px",
-                    fontWeight: "600",
-                    color: "#fff",
-                }   
-            }).showToast();
+            console.error("API add-to-cart failed:", res.status, data);
+            Toastify({ text: data.error || "Something went wrong", duration: 1500, style: { background: "red" } }).showToast();
         }
+        return;
     }
+
+    // Guest fallback (session-based view)
+    const csrftoken = getCookie('csrftoken');
+    const res2 = await fetch(`/add-to-cart/${id}/`, {
+        method: "POST",
+        headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({}) // empty body is fine for session view that uses URL pk
+    });
+
+    // Many Django session view redirects to cart; handle
+    if (res2.redirected) {
+        Toastify({ text: "Added to cart (guest)", duration: 1200, style: { background: "linear-gradient(#4CAF50,#3aa04a)" } }).showToast();
+        setTimeout(() => window.location.reload(), 600);
+        return;
+    }
+
+    // If JSON returned
+    const data2 = await res2.json().catch(() => ({}));
+    Toastify({ text: data2.message || "Added to cart", duration: 1200, style: { background: "linear-gradient(#4CAF50,#3aa04a)" } }).showToast();
+    setTimeout(() => window.location.reload(), 600);
+}
+
+/* load cart count (JWT only) */
+async function loadCartCount() {
+    const access = localStorage.getItem("access");
+    const badge = document.getElementById("cart-count");
+    if (!badge) return;
+
+    if (!access) {
+        // guest - try server-side session count if template prints it (base.html uses 0 fallback)
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/cart/count/", {
+            headers: { "Authorization": "Bearer " + access }
+        });
+        const data = await response.json();
+        badge.textContent = data.cart_count ?? 0;
+    } catch (e) {
+        console.error("Failed to load cart count", e);
+    }
+}
+
+loadCoffees();
+loadCartCount();
 </script>
 {% endblock %}

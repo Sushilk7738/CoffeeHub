@@ -9,9 +9,9 @@
 <div class="login-container">
     <h2>Login</h2>
 
-    <form method="post" class="login-form">
-        {% csrf_token %}
-        {{ form.as_p }}
+    <form id="login-form" class="login-form">
+        <input id="username" type="text" placeholder="Username" required>
+        <input id="password" type="password" placeholder="Password" required>
         <button type="submit">Login</button>
     </form>
 
@@ -19,4 +19,74 @@
         <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
     </div>
 </div>
+
+<script>
+document.getElementById('login-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (!username || !password) {
+        Toastify({
+            text: "Please enter username and password",
+            duration: 1400,
+            style: { background: "red" }
+        }).showToast();
+        return;
+    }
+
+    try {
+        const res = await fetch("/api/auth/login/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+        });
+
+        // try parse json safely
+        let data = {};
+        try {
+            data = await res.json();
+        } catch (err) {
+            data = {};
+        }
+
+        if (res.ok) {
+            // Login succeeded
+            Toastify({
+                text: data.message || "Login successful",
+                duration: 1400,
+                style: { background: "linear-gradient(#4CAF50,#3aa04a)" }
+            }).showToast();
+
+            // Save tokens if provided
+            if (data.access) localStorage.setItem("access", data.access);
+            if (data.refresh) localStorage.setItem("refresh", data.refresh);
+
+            // Update UI pieces which may exist
+            if (typeof updateNavbarAuth === "function") updateNavbarAuth();
+            if (typeof loadCartCount === "function") loadCartCount();
+
+            setTimeout(() => window.location.href = "/", 700);
+        } else {
+            // Failure: show sensible message (prefer API error keys)
+            const errMsg = data.error || data.detail || "Invalid username or password";
+            Toastify({
+                text: errMsg,
+                duration: 1800,
+                style: { background: "red" }
+            }).showToast();
+        }
+    } catch (networkErr) {
+        // Network or other unexpected error
+        console.error("Login request failed:", networkErr);
+        Toastify({
+            text: "Network error. Try again.",
+            duration: 1800,
+            style: { background: "red" }
+        }).showToast();
+    }
+});
+</script>
+
 {% endblock %}

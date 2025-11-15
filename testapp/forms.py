@@ -10,10 +10,9 @@ class ContactForm(forms.ModelForm):
         
         fields = ['name', 'email', 'message']
 
-class CheckoutForm(forms.ModelForm):
-    class Meta:
-        model = Order
-        fields = ['name', 'address', 'card_number']
+class CheckoutForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    address = forms.CharField(widget=forms.Textarea)
 
         
 class ReviewForm(forms.ModelForm):

@@ -10,6 +10,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
 from .forms import CustomUserCreationForm
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
 
 
 
@@ -209,15 +213,31 @@ class MarkDeliveryView(View):
 
 
 
-class UserLoginView(LoginView):
-    template_name = 'testapp/login.html'
-    success_url = reverse_lazy('home')
+# class UserLoginView(LoginView):
+#     template_name = 'testapp/login.html'
+#     success_url = reverse_lazy('home')
 
-class UserLogoutView(LogoutView):
-    template_name = 'testapp/logout.html'
+# class UserLogoutView(LogoutView):
+#     template_name = 'testapp/logout.html'
 
-class SignUpView(CreateView):
-    form_class = CustomUserCreationForm
-    template_name = 'testapp/signup.html'
-    success_url = reverse_lazy('login')
+# class SignUpView(CreateView):
+#     form_class = CustomUserCreationForm
+#     template_name = 'testapp/signup.html'
+#     success_url = reverse_lazy('login')
     
+    
+# Dynamic api views starts from here
+
+class AddCartAPIView(APIView):
+    def post(self, request):
+        user = request.user
+        coffee_id = request.data.get('coffee_id')
+
+        if not coffee_id:
+            return Response({"error" : "coffee_id is required"}, 
+                            status= status.HTTP_400_BAD_REQUEST)
+        try:
+            coffee = Coffee.objects.get(id = coffee_id)
+        except Coffee.DoesNotExist:
+            return Response({"error" : "Coffee not found"}, status= status.HTTP_404_NOT_FOUND)
+

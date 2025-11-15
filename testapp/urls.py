@@ -1,6 +1,8 @@
 from django.urls import path
 from django.views.generic import TemplateView
+from testapp.auth_views import RegisterAPIView, LoginAPIView
 from . import views
+
 
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
@@ -26,8 +28,15 @@ urlpatterns = [
     path('orders/', views.OrderListView.as_view(), name='order_list'),
     path('orders/<int:pk>/delivered/', views.MarkDeliveryView.as_view(), name='mark_delivered'),
 
-    # Authentication
-    path('signup/', views.SignUpView.as_view(), name='signup'),
-    path('login/', views.UserLoginView.as_view(), name='login'),
-    path('logout/', views.UserLogoutView.as_view(), name='logout'),
+    # # Authentication
+    # path('signup/', views.SignUpView.as_view(), name='signup'),
+    # path('login/', views.UserLoginView.as_view(), name='login'),
+    # path('logout/', views.UserLogoutView.as_view(), name='logout'),
+
+    path("api/auth/register/", RegisterAPIView.as_view(), name="jwt-register"),
+    path("api/auth/login/", LoginAPIView.as_view(), name="jwt-login"),
+    
+    # jwtbased login and signup 
+    path("login/", TemplateView.as_view(template_name="testapp/login.html"), name="login"),
+    path("signup/", TemplateView.as_view(template_name="testapp/signup.html"), name="signup"),
 ]

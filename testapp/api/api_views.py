@@ -2,8 +2,16 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from ..models import Coffee, CartItem
+from ..models import Coffee, CartItem, Order
+from rest_framework.permissions import IsAuthenticated
 from .serializers import CoffeeSerializer, CartItemSerializer
+
+import razorpay
+from django.conf import settings
+from rest_framework.permissions import IsAuthenticated
+
+from testapp.utils import api_success, api_error
+
 
 class CoffeeListCreateAPIView(ListCreateAPIView):
     queryset = Coffee.objects.all()
@@ -14,6 +22,7 @@ class CoffeeDetailAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = CoffeeSerializer
 
 class AddToCartAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         # 1.extract data
         coffee_id = request.data.get("coffee_id")
@@ -24,19 +33,93 @@ class AddToCartAPIView(APIView):
             coffee = Coffee.objects.get(id = coffee_id)
         except Coffee.DoesNotExist:
             return Response({"error" : "Coffee not found"}, status=404)
+    
         # 3. Place the GET_OR_CREATE LOGIC HERE
         cart_item, created = CartItem.objects.get_or_create(
+            user = request.user,
             coffee = coffee,
-            defaults={'quantity' : quantity}
+            defaults={'quantity' : 1}
         )
         
         if not created:
-            cart_item.quantity += int(quantity)
+            cart_item.quantity += 1
             cart_item.save()
 
+        cart_count = CartItem.objects.filter(user = request.user).count()
         serializer = CartItemSerializer(cart_item)
 
         return Response({
             "message" :"Item added to cart!",
-            "item" : serializer.data
+            "item" : serializer.data,
+            "cart_count":cart_count
         }, status=200)
+
+
+class CartCountAPIView(APIView):
+    permission_classes = [IsAuthenticated] 
+    def get(self, request):
+        count = CartItem.objects.filter(user=request.user).count()
+        return Response({"cart_count" : count})
+    
+class CartAPIView(APIView):
+    permission_classes = [IsAuthenticated] 
+    def get(self, request):
+        items = CartItem.objects.filter(user = request.user)
+        serializer = CartItemSerializer(items, many = True)
+        cart_total = sum(item.quantity * item.coffee.price for item in items)
+        return Response({"items" : serializer.data, "cart_total" : cart_total})
+        
+class RemoveCartItemAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, pk):
+        try:
+            item = CartItem.objects.get(id=pk, user=request.user)
+            item.delete()
+            return Response({"message": "Removed"}, status=200)
+        except CartItem.DoesNotExist:
+            return Response({"error": "Not found"}, status=404)
+
+    
+#Razorpay client integration:-
+
+razorpay_client = razorpay.Client(
+    auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+)
+
+class CreateRazorpayOrderAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        amount = request.data.get("amount")
+
+        if not amount:
+            return api_error("Amount is required")
+        
+        amount_in_paise = int(float(amount) * 100)
+
+        razorpay_order = razorpay_client.order.create({
+            "amount" : amount_in_paise,
+            "currency" : "INR",
+            "payment_capture" :1
+        })
+
+        order = Order.objects.create(
+            user = request.user,
+            total_price = amount,
+            razorpay_order_id = razorpay_order["id"],
+            status = "pending",
+        )
+        
+        return api_success(
+        payload={
+            "razorpay_order_id": razorpay_order["id"],
+            "amount": amount,
+            "currency": "INR",
+            "key": settings.RAZORPAY_KEY_ID,
+            "order_id": order.id,
+        },
+        message="Razorpay order created"
+    )
+        
+        

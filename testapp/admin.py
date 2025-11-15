@@ -14,9 +14,9 @@ class ContactAdmin(admin.ModelAdmin):
     search_fields = ('name', 'email')
     list_filter = ('created_at',)
     
+@admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['name', 'card_number']
-admin.site.register(Order, OrderAdmin)
+    list_display = ('id', 'user', 'total_price', 'status', 'created_at')
 
 
 class ReviewAdmin(admin.ModelAdmin):

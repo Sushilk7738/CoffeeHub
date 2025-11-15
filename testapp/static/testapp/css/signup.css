@@ -1,77 +1,70 @@
-/* ===================================Sign-up page styling======================================= */
+/* ===================================
+   Sign-up Page Styling
+======================================= */
 
+/* === SIGNUP PAGE CONTAINER === */
 .signup-container {
     max-width: 420px;
     margin: 50px auto;
-    padding: 35px 25px;
-    background-color: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    text-align: center;
+    padding: 35px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0,0,0,0.07);
+    font-family: 'Poppins', sans-serif;
 }
 
+/* === HEADING === */
 .signup-container h2 {
-    font-size: 28px;
-    font-weight: bold;
-    color: #4b2e2e;   
-    margin-bottom: 25px;
-    letter-spacing: 1px;
-}
-
-.signup-form label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: #6f4e37;
-    margin: 8px 0 4px;
-    text-align: left;
-    padding-left: 40px;
-    letter-spacing: 0.5px;
-}
-
-.signup-form input {
-    width: 80%;
-    padding: 10px 14px;
-    margin: 12px 0; 
-    border: 2px solid #e0e0e0;
-    border-radius: 25px;
-    font-size: 15px;
-    background-color: #fafafa;
-    transition: all 0.3s ease;
     text-align: center;
+    margin-bottom: 25px;
+    font-size: 26px;
+    color: #3b2f2f;
+    font-weight: 600;
+}
+
+/* === INPUTS === */
+.signup-form input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0 18px;
+    border: 1px solid #d4c6b6;
+    border-radius: 10px;
+    background: #faf8f6;
+    font-size: 15px;
+    outline: none;
+    transition: 0.25s ease;
 }
 
 .signup-form input:focus {
-    border-color: #6f4e37;
-    background-color: #fff;
-    box-shadow: 0 0 6px rgba(111, 78, 55, 0.4);
-    outline: none;
+    border-color: #b07d62;
+    box-shadow: 0 0 8px rgba(176, 125, 98, 0.3);
 }
 
+/* === BUTTON === */
 .signup-form button {
-    padding: 12px 30px;
-    margin-top: 15px;
-    background-color: #6f4e37;
+    width: 100%;
+    padding: 12px;
+    background: #6f4e37;
     color: #fff;
-    font-size: 16px;
-    font-weight: bold;
     border: none;
-    border-radius: 30px;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-top: 5px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: 0.25s ease;
 }
 
 .signup-form button:hover {
-    background-color: #4b2e2e;
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    background: #523728;
 }
 
+/* === SWITCH LINK === */
 .switch-auth {
-    margin-top: 15px;
+    margin-top: 18px;
+    text-align: center;
     font-size: 14px;
-    color: #555;
 }
 
 .switch-auth a {

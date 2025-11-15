@@ -1,19 +1,16 @@
 {% extends 'base.html' %}
-
 {% load static %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'testapp/css/cart.css' %}">
 {% endblock %}
 
-
-{% block title %}
-Your Cart
-{% endblock %}
-
+{% block title %}Your Cart{% endblock %}
 
 {% block content %}
 <section class="cart-section">
     <h1>Your Cart</h1>
+
     <table class="cart-table">
         <thead>
             <tr>
@@ -25,38 +22,84 @@ Your Cart
             </tr>
         </thead>
 
-        <tbody>
-
-            {% for item in cart_items %}
-            <tr>
-                <td>{{ item.coffee.name }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ item.price|floatformat:2 }}</td>
-                <td>₹{{ item.subtotal|floatformat:2 }} </td>
-                <td>
-                    <form method="post" action="{% url 'remove-from-cart' item.coffee.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="remove-btn">Remove</button>
-                    </form>
-                </td>
-            </tr>
-            
-
-            {% endfor %}
-            <tr>
-                <td colspan="3"><strong>Total:</strong></td>
-                <td><strong>₹{{ total_price|floatformat:2 }}</strong></td>
-            </tr>
-        </tbody>
+        <tbody id="cart-body"></tbody>
     </table>
+
+    <h3>Total: ₹<span id="cart-total">0</span></h3>
 </section>
 
-<div class="checkout-btn-container">
-    <a href="{% url 'checkout' %}" class="checkout-btn">Proceed to Checkout</a>
-</div>
+<script>
+    async function loadCart() {
+        const response = await fetch("/api/cart/", {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("access"),
+            }
+        });
+
+        const data = await response.json();
+        console.log("CART DATA:", data);
+
+        const tbody = document.getElementById("cart-body");
+        const totalSpan = document.getElementById("cart-total");
+
+        if (!data.items || data.items.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align:center; padding:20px;">
+                        Your cart is empty.
+                    </td>
+                </tr>
+            `;
+            totalSpan.textContent = "0";
+            return;
+        }
+
+        tbody.innerHTML = "";
+        let total = 0;
+
+        data.items.forEach(item => {
+            const subtotal = item.quantity * item.coffee.price;
+            total += subtotal;
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${item.coffee.name}</td>
+                    <td>${item.quantity}</td>
+                    <td>₹${item.coffee.price}</td>
+                    <td>₹${subtotal}</td>
+                    <td>
+                        <button onclick="removeItem(${item.id})" class="remove-btn">Remove</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        totalSpan.textContent = total;
+    }
+
+    async function removeItem(id) {
+        const response = await fetch(`/api/cart/remove/${id}/`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("access"),
+            }
+        });
+
+        const data = await response.json();
+
+        Toastify({
+            text: data.message || "Removed!",
+            duration: 1200,
+            style: { background: "black" }
+        }).showToast();
+
+        loadCart();
+        loadCartCount();
+    }
+
+    loadCart();
+</script>
 
 
-<div class="back-button-container">
-    <a href="{% url 'cafe' %}" class="back-btn">← Back to Our Coffees</a>
-</div>
+
 {% endblock %}

@@ -25,7 +25,8 @@
 
             <div class="form-group">
                 <label for="address">Address</label>
-                <textarea name="address" id="address" rows="3" placeholder="Enter your delivery address" required></textarea>
+                <textarea name="address" id="address" rows="3" placeholder="Enter your delivery address"
+                    required></textarea>
             </div>
 
             <button type="submit" id="pay-button" class="checkout-btn">Proceed to Payment</button>
@@ -34,4 +35,38 @@
     </div>
 
 </div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js">
+    document.querySelector(".checkout.form").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value.trim();
+        const address = document.getElementById("address").value.trim();
+
+        if (!name || !address) {
+            Toastify({
+                text: "Name and address required",
+                backgroundColor: "red"
+            }).showToast();
+            return;
+        }
+
+        let cartTotal = 0;
+        try {
+            const resp = await fetch("/api/cart/", {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("access")
+                }
+            });
+            const data = await resp.json();
+            cartTotal = data.total_amount;
+        } catch (err) {
+            Toastify({
+                text: "Unable to load cart",
+                backgroundColor: "red",
+            }).showToast();
+        }
+    })
+</script>
+
 {% endblock %}

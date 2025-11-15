@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     padding: 0;
     margin: 0;
     height: 100%;
@@ -55,6 +56,40 @@ ul li a:hover {
     flex-direction: column;
 }
 
+/* ===== NAVBAR CART IMPROVED DESIGN ===== */
+
+.nav-cart {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    text-decoration: none;
+    color: #3e2723; /* dark coffee brown */
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.nav-cart:hover {
+    color: #5a3829; /* slightly lighter brown */
+}
+
+.nav-cart-icon {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.nav-cart-badge {
+    background: #6f4e37;      /* rich espresso brown */
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+    min-width: 20px;
+    text-align: center;
+}
+
 .menu-toggle {
     display: none;
     font-size: 1.8rem;
@@ -97,6 +132,9 @@ ul li a:hover {
 .signup-btn:hover {
     background: #2f1a1a;
 }
+
+
+
 
 @media (max-width:768px) {
     .nav-opt {

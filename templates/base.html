@@ -3,25 +3,19 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}Maid latte{% endblock %}</title>
+
     <link rel="stylesheet" href="{% static 'testapp/css/base.css' %}">
     {% block extra_css %}{% endblock %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
-    <!-- Toastify CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-    <!-- Toastify JS -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
+    <!-- Toastify -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </head>
 
 <body>
-    <!-- navbar -->
 
     <nav>
         <div class="nav-left">
@@ -37,43 +31,111 @@
         </ul>
 
         <div class="nav-right">
-            <a href="{% url 'cart' %}" class="cart-link">
-                🛒 Cart ({{ request.session.cart|length|default:0 }})
+            <!-- Cart link + badge (badge value comes from API if logged in, else from localStorage) -->
+            <a href="{% url 'cart' %}" class="nav-cart" id="cart-count-link">
+                <span class="nav-cart-icon">🛒</span>
+                <span class="nav-cart-badge" id="cart-count">0</span>
             </a>
 
-            {% if user.is_authenticated %}
-            <form method="post" action="{% url 'logout' %}" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
-            {% else %}
+            <!-- login/signup links (always present in template) -->
             <a href="{% url 'login' %}" class="auth-btn login-btn">Login</a>
             <a href="{% url 'signup' %}" class="auth-btn signup-btn">Sign Up</a>
-            {% endif %}
-        </div>
 
+            <!-- logout button (JS will show/hide) -->
+            <button class="logout-btn" id="logout-btn" style="display:none;">Logout</button>
+        </div>
     </nav>
 
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+    <main>{% block content %}{% endblock %}</main>
 
     <footer>
         <p>&copy; 2025 Maid Latte Coffee Shop. All rights reserved.</p>
         <p>📞 123-456-7890 | ✉️ info@coffeeshop.com</p>
     </footer>
 
+    <!-- NAVBAR + CART client logic (JWT-friendly + anonymous fallback) -->
+    <script>
+        /* Utility: show Toast (standardized) */
+        function showToast(text, opts = {}) {
+            const bg = opts.background || (opts.type === 'error' ? 'red' : 'black');
+            Toastify({
+                text: text || '',
+                duration: opts.duration || 1500,
+                gravity: opts.gravity || 'top',
+                position: opts.position || 'right',
+                style: { background: bg, borderRadius: "8px", fontWeight: "600", color: "#fff" }
+            }).showToast();
+        }
+
+        /* update navbar auth: shows login/signup when no token; shows logout when token exists */
+        function updateNavbarAuth() {
+            const access = localStorage.getItem('access');
+            const loginBtn = document.querySelector('.login-btn');
+            const signupBtn = document.querySelector('.signup-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (access) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (signupBtn) signupBtn.style.display = 'none';
+                if (logoutBtn) logoutBtn.style.display = 'inline-block';
+            } else {
+                if (loginBtn) loginBtn.style.display = 'inline-block';
+                if (signupBtn) signupBtn.style.display = 'inline-block';
+                if (logoutBtn) logoutBtn.style.display = 'none';
+            }
+        }
+
+        /* logout: simply clear tokens and reload page */
+        document.getElementById('logout-btn').addEventListener('click', function () {
+            localStorage.removeItem('access');
+            localStorage.removeItem('refresh');
+
+            localStorage.removeItem('cart_count');        // clear stored count
+            const badge = document.getElementById('cart-count');
+            if (badge) badge.textContent = "0";
+
+
+            showToast("Logged out", { background: "black" });
+            updateNavbarAuth();
+            // reload to refresh any server-rendered pages expecting login state
+            setTimeout(() => window.location.reload(), 250);
+        });
+
+        /* loadCartCount: if logged-in, fetch server count; otherwise use localStorage cart_count */
+        async function loadCartCount() {
+            const badge = document.getElementById('cart-count');
+            const access = localStorage.getItem('access');
+
+            if (access) {
+                try {
+                    const resp = await fetch('/api/cart/count/', {
+                        headers: { "Authorization": "Bearer " + access }
+                    });
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        badge.textContent = data.cart_count ?? 0;
+                        // also mirror to localStorage for persistence across pages if needed
+                        localStorage.setItem('cart_count', String(data.cart_count ?? 0));
+                        return;
+                    } else {
+                        // if unauthorized or error, fall back to local
+                        console.warn('Cart count fetch failed:', resp.status);
+                    }
+                } catch (e) {
+                    console.warn('Cart count fetch exception', e);
+                }
+            }
+
+            // fallback: local count stored by frontend (if user added items while anonymous)
+            const localCount = parseInt(localStorage.getItem('cart_count') || '0', 10);
+            badge.textContent = Number.isFinite(localCount) ? localCount : 0;
+        }
+
+        /* Call on load */
+        updateNavbarAuth();
+        loadCartCount();
+    </script>
 
 </body>
-<script>
-    const menutoggle = document.querySelector('.menu-toggle')
-
-    const navOptions = document.querySelector('.nav-opt')
-
-    menutoggle.addEventListener('click', () => {
-        navOptions.classList.toggle('show');
-    });
-</script>
 
 </html>

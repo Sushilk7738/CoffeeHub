@@ -21,3 +21,4 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     def get_total_price(self, obj):
         return obj.quantity * obj.coffee.price
+
