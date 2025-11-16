@@ -1,8 +1,8 @@
 from django.urls import path
 from django.views.generic import TemplateView
 from testapp.auth_views import RegisterAPIView, LoginAPIView
+from testapp.api.api_views import CreateRazorpayOrderAPIView, VerifyPaymentAPIView
 from . import views
-
 
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
@@ -39,4 +39,10 @@ urlpatterns = [
     # jwtbased login and signup 
     path("login/", TemplateView.as_view(template_name="testapp/login.html"), name="login"),
     path("signup/", TemplateView.as_view(template_name="testapp/signup.html"), name="signup"),
+
+    #order-payment
+    path("api/payment/create-order/", CreateRazorpayOrderAPIView.as_view(), name="create_razorpay_order"),
+    path("api/payment/verify/", VerifyPaymentAPIView.as_view(), name="verify_payment"),
+    path("payment-success/", TemplateView.as_view(template_name="testapp/success.html"), name="payment_success"),
+
 ]

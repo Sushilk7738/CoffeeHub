@@ -10,6 +10,8 @@ import razorpay
 from django.conf import settings
 from rest_framework.permissions import IsAuthenticated
 
+import hmac
+import hashlib
 from testapp.utils import api_success, api_error
 
 
@@ -80,9 +82,9 @@ class RemoveCartItemAPIView(APIView):
         except CartItem.DoesNotExist:
             return Response({"error": "Not found"}, status=404)
 
-    
-#Razorpay client integration:-
 
+
+    
 razorpay_client = razorpay.Client(
     auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
 )
@@ -91,35 +93,88 @@ class CreateRazorpayOrderAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        print("🔥 RECEIVED AMOUNT =", request.data) 
         amount = request.data.get("amount")
 
+        # validate amount
         if not amount:
             return api_error("Amount is required")
-        
-        amount_in_paise = int(float(amount) * 100)
 
+        try:
+            amount_in_paise = int(float(amount) * 100)
+        except ValueError:
+            return api_error("Invalid amount")
+
+        # create razorpay order
         razorpay_order = razorpay_client.order.create({
-            "amount" : amount_in_paise,
-            "currency" : "INR",
-            "payment_capture" :1
+            "amount": amount_in_paise,
+            "currency": "INR",
+            "payment_capture": 1
         })
 
+        # store order in DB
         order = Order.objects.create(
-            user = request.user,
-            total_price = amount,
-            razorpay_order_id = razorpay_order["id"],
-            status = "pending",
+            user=request.user,
+            total_price=amount,
+            razorpay_order_id=razorpay_order["id"],
+            status="pending",
         )
-        
-        return api_success(
-        payload={
+
+        # response to frontend
+        return api_success({
+            "key": settings.RAZORPAY_KEY_ID,
             "razorpay_order_id": razorpay_order["id"],
+            "order_id": order.id,
             "amount": amount,
             "currency": "INR",
-            "key": settings.RAZORPAY_KEY_ID,
-            "order_id": order.id,
-        },
-        message="Razorpay order created"
-    )
+        }, "Razorpay order created")
+
+
+class VerifyPaymentAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        razorpay_order_id = request.data.get("razorpay_order_id")
+        razorpay_payment_id = request.data.get("razorpay_payment_id")
+        razorpay_signature = request.data.get("razorpay_signature")
         
+
+
+        if not all([razorpay_order_id, razorpay_payment_id, razorpay_signature]):
+            return api_error("Missing required payment fields")
+
+        generated_signature = hmac.new(
+            settings.RAZORPAY_KEY_SECRET.encode(),
+            f"{razorpay_order_id}|{razorpay_payment_id}".encode(),
+            hashlib.sha256
+        ).hexdigest()
+
+        print("🔍 DEBUG:", razorpay_order_id, razorpay_payment_id, razorpay_signature)
+        print("🔍 GENERATED:", generated_signature)
+
+        if generated_signature != razorpay_signature:
+            return api_error("Signature Mismatch")
+
+        order_id = request.data.get("order_id")
+        try:
+            order = Order.objects.get(id = order_id, user = request.user)
+        except Order.DoesNotExist:
+            return api_error("Order not found")
+
+        order.status = "paid"
+        order.razorpay_payment_id = razorpay_payment_id
+        order.save()
+
+        cart_items = CartItem.objects.filter(user= request.user)
         
+        for item in cart_items:
+            order.items.create(
+                coffee = item.coffee,
+                quantity = item.quantity,
+                price = item.coffee.price,
+            )
+
+        cart_items.delete()
+
+        return api_success(message="Payment verified successfully!")
+

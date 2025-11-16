@@ -13,60 +13,160 @@
     <div class="checkout-card">
 
         <h1 class="checkout-title">Checkout</h1>
-        <p class="checkout-subtitle">Please provide your billing details to complete your order.</p>
+        <p class="checkout-subtitle">Please provide billing details to continue.</p>
 
-        <form method="post" class="checkout-form">
+        <form class="checkout-form">
             {% csrf_token %}
 
             <div class="form-group">
                 <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                <input type="text" id="name" placeholder="Enter your full name" required>
             </div>
 
             <div class="form-group">
                 <label for="address">Address</label>
-                <textarea name="address" id="address" rows="3" placeholder="Enter your delivery address"
-                    required></textarea>
+                <textarea id="address" rows="3" placeholder="Enter your delivery address" required></textarea>
             </div>
 
-            <button type="submit" id="pay-button" class="checkout-btn">Proceed to Payment</button>
+            <button type="submit" class="checkout-btn">Proceed to Payment</button>
         </form>
 
     </div>
 
 </div>
 
-<script src="https://checkout.razorpay.com/v1/checkout.js">
-    document.querySelector(".checkout.form").addEventListener("submit", async function (e) {
-        e.preventDefault();
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-        const name = document.getElementById("name").value.trim();
-        const address = document.getElementById("address").value.trim();
+<script>
+document.querySelector(".checkout-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-        if (!name || !address) {
+    const name = document.getElementById("name").value.trim();
+    const address = document.getElementById("address").value.trim();
+
+    if (!name || !address) {
+        Toastify({
+            text: "Name and address required",
+            style: { background: "red" }
+        }).showToast();
+        return;
+    }
+
+    // 1️⃣ Fetch Cart Total
+    let cartTotal = 0;
+
+    try {
+        const resp = await fetch("/api/cart/", {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("access")
+            }
+        });
+
+        const data = await resp.json();
+        cartTotal = data.cart_total;
+
+    } catch (err) {
+        Toastify({
+            text: "Unable to load cart",
+            style: { background: "red" }
+        }).showToast();
+        return;
+    }
+
+    // 2️⃣ Create Razorpay Order From Backend
+    let orderData = null;
+
+    try {
+        const r = await fetch("/api/payment/create-order/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("access")
+            },
+            body: JSON.stringify({ amount: cartTotal })
+        });
+
+        orderData = await r.json();
+
+        if (!r.ok) {
             Toastify({
-                text: "Name and address required",
-                backgroundColor: "red"
+                text: orderData.error || "Order creation failed",
+                style: { background: "red" }
             }).showToast();
             return;
         }
 
-        let cartTotal = 0;
-        try {
-            const resp = await fetch("/api/cart/", {
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem("access")
+    } catch (err) {
+        Toastify({
+            text: "Order creation failed",
+            style: { background: "red" }
+        }).showToast();
+        return;
+    }
+
+    // Save backend order id for verification API
+    window.localOrderId = orderData.order_id;
+
+    // 3️⃣ Razorpay Checkout
+    const options = {
+        key: orderData.key,
+        amount: orderData.amount * 100,
+        currency: "INR",
+        name: "Coffee Shop",
+        description: "Order Payment",
+        order_id: orderData.razorpay_order_id,
+
+        handler: async function (response) {
+            try {
+                const verifyRes = await fetch("/api/payment/verify/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + localStorage.getItem("access")
+                    },
+                    body: JSON.stringify({
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature,
+                        order_id: window.localOrderId
+                    })
+                });
+
+                const verifyData = await verifyRes.json();
+
+                if (verifyRes.ok) {
+                    Toastify({
+                        text: "Payment Verified!",
+                        style: { background: "green" }
+                    }).showToast();
+
+                    setTimeout(() => {
+                        window.location.href = "/payment-success/";
+                    }, 600);
+
+                } else {
+                    Toastify({
+                        text: verifyData.error || "Payment verification failed",
+                        style: { background: "red" }
+                    }).showToast();
                 }
-            });
-            const data = await resp.json();
-            cartTotal = data.total_amount;
-        } catch (err) {
-            Toastify({
-                text: "Unable to load cart",
-                backgroundColor: "red",
-            }).showToast();
+
+            } catch (err) {
+                Toastify({
+                    text: "Verification error",
+                    style: { background: "red" }
+                }).showToast();
+            }
+        },
+
+        theme: {
+            color: "#6A4029"
         }
-    })
+    };
+
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+});
 </script>
 
 {% endblock %}

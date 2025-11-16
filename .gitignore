@@ -35,3 +35,5 @@ build/
 
 # Staticfiles (optional if you collectstatic)
 staticfiles/
+
+db.sqlite3
