@@ -8,6 +8,13 @@
 {% endblock %}
 
 {% block content %}
+<script>
+if (!localStorage.getItem("access")) {
+    window.location.href = "/login/";
+}
+</script>
+
+
 <div class="checkout-page">
 
     <div class="checkout-card">

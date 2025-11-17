@@ -16,9 +16,11 @@ import os
 import environ
 
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMP_DIR = os.path.join(BASE_DIR, 'templates')
+
 
 #Initializing environment
 env = environ.Env(
@@ -166,3 +168,15 @@ STATICFILES_FINDERS = [
 
 RAZORPAY_KEY_ID = env("RAZORPAY_KEY_ID")
 RAZORPAY_KEY_SECRET = env("RAZORPAY_KEY_SECRET")
+
+
+# EMAIL INTEGRATION:-
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+

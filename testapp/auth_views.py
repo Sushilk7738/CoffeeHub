@@ -51,6 +51,8 @@ class LoginAPIView(APIView):
         user = authenticate(username=username, password=password)
         if user is None:
             return api_error("Invalid credentials", http_status=401)
+        
+        request.session["jwt_user_id"] = user.id
 
         tokens = generate_tokens(user)
 

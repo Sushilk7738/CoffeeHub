@@ -13,6 +13,9 @@ from .forms import CustomUserCreationForm
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.mixins import LoginRequiredMixin
+from testapp.utils_email import make_invoice_pdf
+
 
 
 
@@ -156,37 +159,38 @@ class Contact_View(View):
 #     template_name = 'testapp/checkout.html'
 
 
-class CheckoutView(View):
-    def get(self, request):
-        form = CheckoutForm()
-        return render(request, 'testapp/checkout.html', {'form': form, 'order': None})
+# class CheckoutView(View):
+#     def get(self, request):
+#         form = CheckoutForm()
+#         return render(request, 'testapp/checkout.html', {'form': form, 'order': None})
 
-    def post(self, request):
-        form = CheckoutForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
+#     def post(self, request):
+#         form = CheckoutForm(request.POST)
+#         if form.is_valid():
+#             order = form.save(commit=False)
+#             order.user = request.user
 
-            cart = request.session.get('cart', {})
-            total_price = 0
-            items = []
+#             cart = request.session.get('cart', {})
+#             total_price = 0
+#             items = []
 
-            for pk, item in cart.items():
-                total_price += item['price'] * item['quantity']
-                coffee = get_object_or_404(Coffee, id=item['coffee_id'])
-                items.append(coffee)
+#             for pk, item in cart.items():
+#                 total_price += item['price'] * item['quantity']
+#                 coffee = get_object_or_404(Coffee, id=item['coffee_id'])
+#                 items.append(coffee)
 
-            order.total_price = total_price
-            order.save()
-            order.items.add(*items)
+#             order.total_price = total_price
+#             order.save()
+#             order.items.add(*items)
 
-            # cart clear
-            request.session['cart'] = {}
-
-        
-            return redirect('success')
+#             # cart clear
+#             request.session['cart'] = {}
 
         
-        return render(request, 'testapp/checkout.html', {'form': form, 'order': None})
+#             return redirect('success')
+
+        
+#         return render(request, 'testapp/checkout.html', {'form': form, 'order': None})
 
 
 
@@ -195,7 +199,34 @@ class OrderListView(ListView):
     template_name = 'testapp/order_list.html'
     context_object_name = 'orders'
     ordering = ['-created_at']
+
+    def get_queryset(self):
+        # EXTRACT JWT USER ID FROM THE SESSION
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+
+        user_id = self.request.session.get("jwt_user_id")  # <--- STORE THIS AT LOGIN
+
+        if user_id:
+            return Order.objects.filter(user_id=user_id).order_by('-created_at')
+        
+        return Order.objects.none()
     
+    
+    
+
+class DownloadInvoiceView(View):
+    def get(self, request, order_id):
+        try:
+            order = Order.objects.get(id=order_id)
+        except Order.DoesNotExist:
+            return HttpResponse("Order not found or access denied.", status=404)
+
+        pdf_bytes = make_invoice_pdf(order)
+
+        response = HttpResponse(pdf_bytes, content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="invoice_{order.id}.pdf"'
+        return response
 
 
 

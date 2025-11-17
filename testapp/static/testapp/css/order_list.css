@@ -68,7 +68,7 @@
 }
 
 /* Status badge */
-.order-status {
+.order-status.paid {
     padding: 6px 12px;
     border-radius: 20px;
     font-size: 0.85rem;
@@ -77,7 +77,7 @@
     color: #fff;
 }
 
-.order-status.delivered {
+.order-status.paid {
     background-color: #4CAF50;
 }
 
@@ -98,4 +98,35 @@
     background-color: #f5f2ef;
     padding: 15px;
     border-radius: 8px;
+}
+
+
+.download-invoice-btn {
+    padding: 6px 12px;
+    background: #d4a05c;       /* same theme color */
+    color: white;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 6px;
+    margin-right: 10px;
+    transition: 0.25s ease-in-out;
+}
+
+/* Hover Effect */
+.download-invoice-btn:hover {
+    background: #b88441;
+    transform: translateY(-2px);
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+    .download-invoice-btn {
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+        margin-top: 10px;
+    }
 }

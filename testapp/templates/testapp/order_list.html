@@ -15,10 +15,16 @@
         <ul>
             {% for order in orders %}
                 <li class="order-card">
+
                     <div class="order-info">
                         <span class="order-id">Order #{{ order.id }}</span>
                         <span class="order-meta">{{ order.created_at|date:"d M Y, h:i A" }}</span>
                     </div>
+
+                    <!-- DOWNLOAD INVOICE BUTTON -->
+                    <a href="{% url 'download_invoice' order.id %}" class="download-invoice-btn">
+                        Download Invoice
+                    </a>
 
                     <div class="order-total">
                         <strong>Total:</strong> ₹{{ order.total_price|floatformat:2 }}
