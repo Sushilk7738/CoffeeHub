@@ -1,19 +1,65 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
-
-{% block content %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'testapp/css/home.css' %}">
 {% endblock %}
-<section class="hero">
-    <div class="hero-overlay">
-        <div class="hero-content">
-            <h1>Where Every Sip Tells a Story</h1>
-            <p>Discover premium, hand‑crafted coffees brewed with love.</p>
-            <a href="{% url 'cafe' %}" class="hero-btn">Explore Our Coffees</a>
+
+{% block content %}
+
+<section class="hero-slider">
+
+    <!-- Slide 1 -->
+    <div class="hero-slide active">
+        <img src="{% static 'testapp/images/slider1.jpg' %}" class="hero-img">
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1>Where Every Sip Tells a Story</h1>
+                <p>The finest handcrafted coffees, served with love.</p>
+                <a href="{% url 'cafe' %}" class="hero-btn">Explore Our Coffees</a>
+            </div>
         </div>
     </div>
-</section>    
+
+    <!-- Slide 2 -->
+    <div class="hero-slide">
+        <img src="{% static 'testapp/images/slider2.jpg' %}" class="hero-img">
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1>Fresh Beans, Fresh Flavor</h1>
+                <p>Experience world-class roasting and brewing.</p>
+                <a href="{% url 'cafe' %}" class="hero-btn">Try Our Specialties</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="hero-slide">
+        <img src="{% static 'testapp/images/slider3.jpg' %}" class="hero-img">
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1>Your Daily Coffee Ritual</h1>
+                <p>Brewed to perfection. Enjoyed with passion.</p>
+                <a href="{% url 'cafe' %}" class="hero-btn">Order Now</a>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- ====================== SLIDER SCRIPT ====================== -->
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.hero-slide');
+
+    function changeSlide() {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }
+
+    setInterval(changeSlide, 5000);
+</script>
+
 {% endblock %}

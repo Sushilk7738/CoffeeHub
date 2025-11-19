@@ -1,40 +1,79 @@
-/* ===== Hero Section Styles ===== */
-
-.hero {
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    background-image: url("../images/backgr.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
+/* HERO WRAPPER */
+.hero-slider {
     position: relative;
+    width: 100%;
+    height: 90vh;           /* FIX: consistent height */
+    overflow: hidden;
 }
 
-.hero-content {
-    background-color: rgba(0, 0, 0, 0.4);
-    padding: 20px 40px;
-    border-radius: 10px;
+/* EACH SLIDE */
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
 }
 
-.hero-btn {
-    display: inline-block;
-    background-color: #6f4e37;
+/* ACTIVE SLIDE */
+.hero-slide.active {
+    opacity: 1;
+    z-index: 2;
+}
+
+/* SLIDE IMAGE */
+.hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;      /* FIXES alignment */
+    object-position: center;
+    display: block;
+}
+
+/* DARK OVERLAY */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* TEXT */
+.hero-content h1 {
+    font-size: 3rem;
     color: #fff;
-    padding: 12px 25px;
-    border-radius: 5px;
-    font-size: 1rem;
+    margin-bottom: 12px;
+}
+
+.hero-content p {
+    color: #eee;
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+}
+
+/* BUTTON */
+.hero-btn {
+    padding: 14px 30px;
+    background: #8B5E34;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 1.1rem;
     font-weight: 600;
-    text-decoration: none;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
+    transition: .3s;
 }
 
 .hero-btn:hover {
-    background-color: #462d1a;
+    background: #6A462A;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-slider { height: 70vh; }
+
+    .hero-content h1 { font-size: 2rem; }
+    .hero-content p { font-size: 1rem; }
 }
